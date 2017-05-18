@@ -95,8 +95,8 @@
     this.trigger = function(trigger) {
       return _trigger = trigger;
     };
-    this.class = function(class) {
-      return _class = class;
+    this.class = function(cssClassObj) {
+      return _class = cssClassObj;
     };
     this.$get = function() {
       return {
