@@ -28,11 +28,11 @@
         options = scope.$eval(attrs.showErrors);
         showSuccess = getShowSuccess(options);
         trigger = getTrigger(options);
-        inputEl = el[0].querySelector('.form-control[name]');
+        inputEl = el[0].querySelector('.' + showErrorsConfig.class.formControl + '[name]');
         inputNgEl = angular.element(inputEl);
         inputName = $interpolate(inputNgEl.attr('name') || '')(scope);
         if (!inputName) {
-          throw "show-errors element has no child input elements with a 'name' attribute and a 'form-control' class";
+          throw "show-errors element has no child input elements with a 'name' attribute and a '" + showErrorsConfig.class.formControl + "' class";
         }
         inputNgEl.bind(trigger, function() {
           blurred = true;
@@ -51,15 +51,15 @@
         });
         scope.$on('show-errors-reset', function() {
           return $timeout(function() {
-            el.removeClass('has-error');
-            el.removeClass('has-success');
+            el.removeClass(showErrorsConfig.class.hasError);
+            el.removeClass(showErrorsConfig.class.hasSuccess);
             return blurred = false;
           }, 0, false);
         });
         return toggleClasses = function(invalid) {
-          el.toggleClass('has-error', invalid);
+          el.toggleClass(showErrorsConfig.class.hasError, invalid);
           if (showSuccess) {
-            return el.toggleClass('has-success', !invalid);
+            return el.toggleClass(showErrorsConfig.class.hasSuccess, !invalid);
           }
         };
       };
@@ -68,8 +68,8 @@
         require: '^form',
         compile: function(elem, attrs) {
           if (attrs['showErrors'].indexOf('skipFormGroupCheck') === -1) {
-            if (!(elem.hasClass('form-group') || elem.hasClass('input-group'))) {
-              throw "show-errors element does not have the 'form-group' or 'input-group' class";
+            if (!(elem.hasClass(showErrorsConfig.class.formGroup) || elem.hasClass(showErrorsConfig.class.inputGroup))) {
+              throw "show-errors element does not have the '" + showErrorsConfig.class.formGroup + "' or '" + showErrorsConfig.class.inputGroup + "' class";
             }
           }
           return linkFn;
@@ -79,19 +79,30 @@
   ]);
 
   showErrorsModule.provider('showErrorsConfig', function() {
-    var _showSuccess, _trigger;
+    var _showSuccess, _trigger, _class;
     _showSuccess = false;
     _trigger = 'blur';
+    _class = {
+      formGroup: 'form-group',
+      inputGroup: 'input-group',
+      formControl: 'form-control',
+      hasError: 'has-error',
+      hasSuccess: 'has-success',
+    };
     this.showSuccess = function(showSuccess) {
       return _showSuccess = showSuccess;
     };
     this.trigger = function(trigger) {
       return _trigger = trigger;
     };
+    this.class = function(class) {
+      return _class = class;
+    };
     this.$get = function() {
       return {
         showSuccess: _showSuccess,
-        trigger: _trigger
+        trigger: _trigger,
+        class: _class,
       };
     };
   });
