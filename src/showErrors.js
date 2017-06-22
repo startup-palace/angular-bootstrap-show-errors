@@ -30,7 +30,7 @@
         showSuccess = getShowSuccess(options);
         trigger = getTrigger(options);
         inputElements = {};
-        _ref = el[0].querySelectorAll('.form-control[name]');
+        _ref = el[0].querySelectorAll('.'+showErrorsConfig.class.formControl+'[name]');
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           inputElement = _ref[_i];
           if (inputName = $interpolate(inputElement.name || '')(scope)) {
@@ -74,7 +74,7 @@
           });
         });
         if (!inputNames.length) {
-          throw "show-errors element has no child input elements with a 'name' attribute and a 'form-control' class";
+          throw "show-errors element has no child input elements with a 'name' attribute and a '" + showErrorsConfig.class.formControl + "' class";
         }
         scope.$on('show-errors-check-validity', function() {
           return toggleClasses(!isValid());
@@ -117,6 +117,7 @@
     _class = {
       formGroup: 'form-group',
       inputGroup: 'input-group',
+      formControl: 'form-control',
       hasError: 'has-error',
       hasSuccess: 'has-success',
     };
